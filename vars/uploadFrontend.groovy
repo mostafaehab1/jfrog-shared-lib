@@ -2,15 +2,17 @@ def call(Map config = [:]) {
 
     def distDir = config.distDir ?: 'dist'
     def repository = config.repository ?: 'key'
-    def version = config.version ?: env.TAG_NAME ?: env.BRANCH_NAME ?: env.BUILD_NUMBER
+    def release = config.release ?: error('release is required')
+    def buildId = config.buildId ?: error('buildId is required')
 
-    def target = version
-    def archive = "frontend-dist-${version}.tar.gz"
+    def target = "${release}/build-${buildId}"
+    def archive = "frontend-dist-${buildId}.tar.gz"
 
     echo "Uploading frontend build..."
     echo "Dist directory: ${distDir}"
     echo "Repository: ${repository}"
-    echo "Version: ${version}"
+    echo "Release: ${release}"
+    echo "Build ID: ${buildId}"
     echo "Target: ${target}"
 
     sh """
